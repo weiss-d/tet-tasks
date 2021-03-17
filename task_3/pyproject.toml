@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "presence-calculator"
+version = "0.1.0"
+description = "Task 3"
+authors = ["Simon Weiss <wonder@simonweiss.space>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^1.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.1"
+ipython = "^7.19.0"
+ipdb = "^0.13.4"
+ptpython = "^3.0.16"
+
+[build-system]
+requires = ["poetry-core>=1.0.0a5"]
+build-backend = "poetry.core.masonry.api"
