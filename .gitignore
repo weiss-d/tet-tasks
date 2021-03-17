@@ -6,6 +6,7 @@ _temp
 .tool-versions
 taskell.md
 *.txt
+!requirements.txt
 
 
 # =============================================================================

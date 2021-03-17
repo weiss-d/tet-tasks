@@ -1,0 +1,10 @@
+certifi==2020.12.5; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+chardet==4.0.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+dawg-python==0.7.2
+docopt==0.6.2
+idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+pymorphy2-dicts-ru==2.4.417127.4579844
+pymorphy2==0.9.1
+requests==2.25.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+urllib3==1.26.4; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4"
+wikipedia-api==0.5.4
