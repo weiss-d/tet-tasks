@@ -30,6 +30,7 @@ logging.basicConfig(
     format="[%(asctime)s] %(message)s",
     datefmt="%d-%m-%y %H:%M:%S",
 )
+LOG_STING = "Request from %s, Data: %s, Status: %s, Response: %s"
 
 app = Flask(__name__)
 
@@ -37,8 +38,21 @@ app = Flask(__name__)
 @app.route("/appearance", methods=["POST"])
 def appearance():
     if _validate_input(request.json):
-        return jsonify({"appearance": calculator.appearance(request.json)})
-    return (jsonify(error="Input data is invalid."), 422)
+        response_dict = {"appearance": calculator.appearance(request.json)}
+        app.logger.info(
+            LOG_STING,
+            request.remote_addr,
+            request.data[:1000],
+            "OK",
+            str(response_dict),
+        )
+        return jsonify(response_dict)
+
+    response_dict = {"error": "Input data is invalid."}
+    app.logger.info(
+        LOG_STING, request.remote_addr, request.data[:1000], "ERROR", str(response_dict)
+    )
+    return (jsonify(response_dict), 422)
 
 
 if __name__ == "__main__":
