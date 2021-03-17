@@ -7,7 +7,7 @@ from typing import Dict, Iterable, List, Tuple, TypeVar
 T = TypeVar("T")
 
 
-def _pairwise(iterable: Iterable[T]) -> Iterable[Tuple[T, T]]:
+def pairwise(iterable: Iterable[T]) -> Iterable[Tuple[T, T]]:
     """Разбивает входной итерируемый элемент на пары:
     s -> (s0, s1), (s2, s3), (s4, s5), ...
     """
@@ -33,7 +33,7 @@ def _trim_by_lesson(lesson_list: List[int], trimming_list: List[int]) -> List[in
     """
     output_list: list = []
 
-    for start, end in _pairwise(trimming_list):
+    for start, end in pairwise(trimming_list):
         if start > lesson_list[1]:
             break
         if end < lesson_list[0]:
@@ -102,8 +102,8 @@ def appearance(presense_dict: Dict[str, List[int]]) -> int:
         presense_dict["lesson"], presense_dict["pupil"]
     )
 
-    for tutor_interval in _pairwise(tutor_times):
-        for pupil_interval in _pairwise(pupil_times):
+    for tutor_interval in pairwise(tutor_times):
+        for pupil_interval in pairwise(pupil_times):
             total_time += _get_overlap_time(tutor_interval, pupil_interval)
 
     return total_time

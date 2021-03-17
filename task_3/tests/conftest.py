@@ -65,3 +65,41 @@ def timing_data_normal(request):
 )
 def timing_data_corner(request):
     return request.param
+
+
+# Error cases
+@pytest.fixture(
+    params=[
+        {
+            "lesson": [500, 1500],
+            "tutor": [900, 1300],
+        },
+        {
+            "lesson": [-500, 1500],
+            "pupil": [550, 550],
+            "tutor": [400, 600],
+        },
+        {
+            "lesson": [500.5, 1500],
+            "pupil": [550, 550],
+            "tutor": [400, 600],
+        },
+        {
+            "lesson": [500, 1500],
+            "pupil": [550, 500],
+            "tutor": [400, 600],
+        },
+        {
+            "lesson": [500, 1500],
+            "pupil": [550],
+            "tutor": [400, 600],
+        },
+        {
+            "lesson": [500, 1500],
+            "pupil": 550,
+            "tutor": [400, 600],
+        },
+    ]
+)
+def timing_data_invalid(request):
+    return request.param
