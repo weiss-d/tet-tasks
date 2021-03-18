@@ -1,3 +1,7 @@
+"""
+Task 3
+WEB API
+"""
 import logging
 from typing import Dict, List
 
@@ -6,13 +10,26 @@ from flask import Flask, jsonify, request
 from presence_calculator import calculator
 
 
-def _validate_input(presense_dict: Dict[str, List[int]]) -> bool:
-    if not all((key in presense_dict.keys() for key in ("lesson", "pupil", "tutor"))):
+def _validate_input(presence_dict: Dict[str, List[int]]) -> bool:
+    """Проверка корректности входного словаря, получаемого из JSON-данных запроса.
+
+    Parameters
+    ----------
+    presence_dict : Dict[str, List[int]]
+        Входной словарь.
+
+    Returns
+    -------
+    bool
+        Подтверждение корректности.
+
+    """
+    if not all((key in presence_dict.keys() for key in ("lesson", "pupil", "tutor"))):
         return False
-    if not all((isinstance(value, list) for value in presense_dict.values())):
+    if not all((isinstance(value, list) for value in presence_dict.values())):
         return False
 
-    for timing_list in presense_dict.values():
+    for timing_list in presence_dict.values():
         if len(timing_list) % 2:
             return False
 
@@ -25,6 +42,8 @@ def _validate_input(presense_dict: Dict[str, List[int]]) -> bool:
     return True
 
 
+# Настройка логирования
+
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(message)s",
@@ -32,11 +51,25 @@ logging.basicConfig(
 )
 LOG_STING = "Request from %s, Data: %s, Status: %s, Response: %s"
 
+
+# Flask app
+
 app = Flask(__name__)
 
 
 @app.route("/appearance", methods=["POST"])
 def appearance():
+    """Ожидается POST-запрос, содержащий в теле JSON-данные в формате:
+        {
+          "lesson": [...],
+          "pupil": [...],
+          "tutor": [...]
+        }
+    В случае успеха возвращает JSON:
+        {"appearance": <результат>}
+    В случае некорректности входных данных:
+        {"error": "Input data is invalid."}
+    """
     if _validate_input(request.json):
         response_dict = {"appearance": calculator.appearance(request.json)}
         app.logger.info(

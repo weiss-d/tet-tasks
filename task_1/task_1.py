@@ -1,7 +1,27 @@
-from typing import List, Union
+"""
+Task 1
+"""
+from typing import List, Tuple, Union
 
 
-def task(array: Union[List, str]) -> Union[int, None]:
+def task(array: Union[List, Tuple, str]) -> Union[int, None]:
+    """Поиск индекса первого нуля в упорядоченной коллекции из последовательности единиц
+    и следующей за ней последовательности нулей.
+
+        >>> task("111111111111111111111111100000000")
+        25
+
+    Parameters
+    ----------
+    array : Union[List, Tuple, str]
+        Входная коллекция.
+
+    Returns
+    -------
+    Union[int, None]
+        Индекс первого нуля, либо None при отсутствии строке нулей.
+
+    """
     if int(array[-1]) == 1:
         return None
     if int(array[0]) == 0:
@@ -27,6 +47,6 @@ def task(array: Union[List, str]) -> Union[int, None]:
 
 
 if __name__ == "__main__":
-    test_string = "111111111111111111111111100000000"
-    print(f"Test string: {test_string}")
-    print(f"Result: {task(test_string)}")
+    TEST_STRING = "111111111111111111111111100000000"
+    print(f"Test string: {TEST_STRING}")
+    print(f"Result: {task(TEST_STRING)}")

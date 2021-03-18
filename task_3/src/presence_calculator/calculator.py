@@ -1,4 +1,6 @@
 """
+Task 3
+
 Модуль вычисления одновременного пребывания ученика и учителя на уроке.
 Все границы временных интервалов имеют формат Unix Timestamp.
 """
@@ -73,12 +75,12 @@ def _get_overlap_time(interval_1: Tuple[int, int], interval_2: Tuple[int, int]) 
     return 0
 
 
-def appearance(presense_dict: Dict[str, List[int]]) -> int:
+def appearance(presence_dict: Dict[str, List[int]]) -> int:
     """Возвращает время одновременного пребывания ученика и учителя на уроке.
 
     Parameters
     ----------
-    presense_dict : Dict[str, List[int]]
+    presence_dict : Dict[str, List[int]]
         Словарь с таймингами урока, ученика и учителя.
         Формат:
             {
@@ -96,10 +98,10 @@ def appearance(presense_dict: Dict[str, List[int]]) -> int:
     total_time: int = 0
 
     tutor_times: List[int] = _trim_by_lesson(
-        presense_dict["lesson"], presense_dict["tutor"]
+        presence_dict["lesson"], presence_dict["tutor"]
     )
     pupil_times: List[int] = _trim_by_lesson(
-        presense_dict["lesson"], presense_dict["pupil"]
+        presence_dict["lesson"], presence_dict["pupil"]
     )
 
     for tutor_interval in pairwise(tutor_times):

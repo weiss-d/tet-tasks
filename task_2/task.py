@@ -34,7 +34,7 @@ def normalize_if_noun(any_word):
     """
     for pare_variant in morph.parse(any_word):
         # Отбираем только существительные в именительном падеже,
-        # множественном или единственном числе. Кол-во вариантор ограничиваем по рейтингу.
+        # множественном или единственном числе. Кол-во вариантов ограничиваем по рейтингу.
         # Первый найденный вариант считаем правильным.
         if pare_variant.score >= 0.3 and {"NOUN", "nomn"} in pare_variant.tag:
             return pare_variant.normal_form
