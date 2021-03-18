@@ -12,24 +12,6 @@ def client():
         yield client
 
 
-# Тесты валидации входных данных из запроса
-
-
-def test_validate_input_correct(timing_data_normal):
-    assert app._validate_input(timing_data_normal["timing_dict"])
-
-
-def test_validate_input_correct_corner_cases(timing_data_corner):
-    assert app._validate_input(timing_data_corner["timing_dict"])
-
-
-def test_validate_input_invalid(timing_data_invalid):
-    assert not app._validate_input(timing_data_invalid)
-
-
-# Тесты API
-
-
 def test_api_request_normal_cases(client, timing_data_normal):
     response = client.post("/appearance", json=timing_data_normal["timing_dict"])
     assert response.status_code == 200
@@ -39,6 +21,6 @@ def test_api_request_normal_cases(client, timing_data_normal):
 
 
 def test_api_request_invalid_input(client, timing_data_invalid):
-    response = client.post("/appearance", json=timing_data_invalid)
+    response = client.post("/appearance", json=timing_data_invalid["timing_dict"])
     assert response.status_code == 422
-    assert json.loads(response.data) == {"error": "Input data is invalid."}
+    assert timing_data_invalid["error_message"] in json.loads(response.data)["error"]

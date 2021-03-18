@@ -71,33 +71,51 @@ def timing_data_corner(request):
 @pytest.fixture(
     params=[
         {
-            "lesson": [500, 1500],
-            "tutor": [900, 1300],
+            "timing_dict": {
+                "lesson": [500, 1500],
+                "tutor": [900, 1300],
+            },
+            "error_message": "validation error",
         },
         {
-            "lesson": [-500, 1500],
-            "pupil": [550, 550],
-            "tutor": [400, 600],
+            "timing_dict": {
+                "lesson": [-500, 1500],
+                "pupil": [550, 550],
+                "tutor": [400, 600],
+            },
+            "error_message": "Timing list has incorrect timestamp",
         },
         {
-            "lesson": [500.5, 1500],
-            "pupil": [550, 550],
-            "tutor": [400, 600],
+            "timing_dict": {
+                "lesson": ["null", 1500],
+                "pupil": [550, 550],
+                "tutor": [400, 600],
+            },
+            "error_message": "validation error",
         },
         {
-            "lesson": [500, 1500],
-            "pupil": [550, 500],
-            "tutor": [400, 600],
+            "timing_dict": {
+                "lesson": [500, 1500],
+                "pupil": [550, 500],
+                "tutor": [400, 600],
+            },
+            "error_message": "Timing list has incorrect interval",
         },
         {
-            "lesson": [500, 1500],
-            "pupil": [550],
-            "tutor": [400, 600],
+            "timing_dict": {
+                "lesson": [500, 1500],
+                "pupil": [550],
+                "tutor": [400, 600],
+            },
+            "error_message": "Timing list has unpaired items",
         },
         {
-            "lesson": [500, 1500],
-            "pupil": 550,
-            "tutor": [400, 600],
+            "timing_dict": {
+                "lesson": [500, 1500],
+                "pupil": 550,
+                "tutor": [400, 600],
+            },
+            "error_message": "validation error",
         },
     ]
 )

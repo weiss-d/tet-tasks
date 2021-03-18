@@ -8,38 +8,37 @@ from typing import Dict, List
 import waitress
 from flask import Flask, jsonify, request
 from presence_calculator import calculator
+from pydantic import BaseModel, ValidationError, validator
 
 
-def _validate_input(presence_dict: Dict[str, List[int]]) -> bool:
-    """Проверка корректности входного словаря, получаемого из JSON-данных запроса.
+class TimingData(BaseModel):
+    """Валидация словаря таймингов, получаемого по API."""
 
-    Parameters
-    ----------
-    presence_dict : Dict[str, List[int]]
-        Входной словарь.
+    lesson: List[int]
+    pupil: List[int]
+    tutor: List[int]
 
-    Returns
-    -------
-    bool
-        Подтверждение корректности.
-
-    """
-    if not all((key in presence_dict.keys() for key in ("lesson", "pupil", "tutor"))):
-        return False
-    if not all((isinstance(value, list) for value in presence_dict.values())):
-        return False
-
-    for timing_list in presence_dict.values():
+    @validator("*")
+    def check_for_pairs(cls, timing_list):
+        """Проверка чётности длины списков."""
         if len(timing_list) % 2:
-            return False
+            raise ValueError("Timing list has unpaired items")
+        return timing_list
 
+    @validator("*", each_item=True)
+    def check_time_correctness(cls, time_value):
+        """Все тайминги должны быть положительными."""
+        if time_value < 0:
+            raise ValueError("Timing list has incorrect timestamp")
+        return time_value
+
+    @validator("*")
+    def check_interval_correctness(cls, timing_list):
+        """Начало интервала не должно быть больше конца интервала."""
         for start, end in calculator.pairwise(timing_list):
-            if not isinstance(start, int) or not isinstance(end, int):
-                return False
-            if start < 0 or end < 0 or end < start:
-                return False
-
-    return True
+            if start > end:
+                raise ValueError("Timing list has incorrect interval")
+        return timing_list
 
 
 # Настройка логирования
@@ -66,26 +65,30 @@ def appearance():
           "tutor": [...]
         }
     В случае успеха возвращает JSON:
-        {"appearance": <результат>}
+        {"appearance": результат}
     В случае некорректности входных данных:
-        {"error": "Input data is invalid."}
+        {"error": "описание_ошибки"}
     """
-    if _validate_input(request.json):
-        response_dict = {"appearance": calculator.appearance(request.json)}
-        app.logger.info(
-            LOG_STING,
-            request.remote_addr,
-            request.data[:1000],
-            "OK",
-            str(response_dict),
-        )
-        return jsonify(response_dict)
+    response_dict: Dict
+    response_status: int
 
-    response_dict = {"error": "Input data is invalid."}
+    try:
+        timing_data = TimingData.parse_obj(request.json)
+        response_dict = {"appearance": calculator.appearance(timing_data.dict())}
+        response_status = 200
+    except (ValidationError, ValueError) as error:
+        response_dict = {"error": str(error)}
+        response_status = 422
+
     app.logger.info(
-        LOG_STING, request.remote_addr, request.data[:1000], "ERROR", str(response_dict)
+        LOG_STING,
+        request.remote_addr,
+        request.data[:1000],
+        response_status,
+        str(response_dict),
     )
-    return (jsonify(response_dict), 422)
+
+    return (jsonify(response_dict), response_status)
 
 
 if __name__ == "__main__":
