@@ -19,11 +19,13 @@
 ```js
 {"appearance": результат_в_секундах}
 ```
+HTTP статус: 200
 
 Если входные данные некорректные:
 ```js
 {"error": "Input data is invalid."}
 ```
+HTTP статус: 422
 
 ### Запуск в Docker
 
@@ -40,7 +42,7 @@ curl --location --request POST 'localhost:5000/appearance' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "lesson": [
-        -1594663200,
+        1594663200,
         1594666800
     ],
     "pupil": [
